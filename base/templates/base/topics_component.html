@@ -1,0 +1,12 @@
+<hr>
+<h3>Browse Topics</h3>
+<hr>
+<div>
+    <a href="{% url 'home' %}">ALL</a> <!-- url gives url from name not class -->
+</div>
+
+{% for topic in topics %}
+    <div>
+        <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a> <!-- url gives url from name not class -->
+    </div>
+{% endfor %}
