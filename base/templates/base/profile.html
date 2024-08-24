@@ -2,28 +2,21 @@
 
 {% block content %}
 
-<style>
-    .profile-container {
-        display: grid;
-        grid-template-columns: 1fr 2fr 1fr;
-    }
-</style>
-
-<h1>{{user.username}}</h1>
-
-<div class="profile-container">
-    <div >
+<main class="profile-page layout layout--3">
+    <div class="container">
+        <!--topics-->
         {% include "base/topics_component.html" %}
-    </div>
+        <!--topics end -->
 
-    <div>
-        {% include "base/feed_component.html" %}
-
-    </div>
-
-    <div>
+        <!--feed-->
+        {% include "base/profile_list.html" %}
+        <!--feed end-->
+        
+        <!--activity-->
         {% include "base/activity_component.html" %}
+        <!--activity end-->
     </div>
+</main>
 
 
 {% endblock content %}
