@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.db.models import Q
 from .models import Room , Message , Topic
-from .forms import RoomForm 
+from .forms import RoomForm , UserForm
 
 # queryset = ModelName.objects.all()  # This will return all the objects in the database 
 # other methods are filter(), get(), exclude(), order_by(), etc. use are similar to SQL queries
@@ -208,3 +208,15 @@ def deleteMessage(request,pk):
         return redirect('home')
     context = {'obj': message}
     return render(request, 'base/delete.html', context)
+
+@login_required(login_url='login')
+def updateUser(request):
+    user = request.user
+    form = UserForm(instance=user)
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=user.id)
+    context = {'form': form}
+    return render(request, 'base/update_user.html', context)
