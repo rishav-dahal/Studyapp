@@ -1,13 +1,12 @@
-from django.contrib.auth.models import User
 from django.shortcuts import render ,redirect
 from django.contrib.auth import login , logout , authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+
 from django.http import HttpResponse
 from django.contrib import messages
 from django.db.models import Q
-from .models import Room , Message , Topic
-from .forms import RoomForm , UserForm
+from .models import Room , Message , Topic , User
+from .forms import RoomForm , UserForm , CustomUserCreationForm
 
 # queryset = ModelName.objects.all()  # This will return all the objects in the database 
 # other methods are filter(), get(), exclude(), order_by(), etc. use are similar to SQL queries
@@ -65,10 +64,10 @@ def logoutUser(request):
     return redirect('home')
 
 def registerPage(request):
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
 
         if request.method == 'POST':
-            form =  UserCreationForm(request.POST) # UserCreationForm() is a built-in form that will create a new user
+            form =  CustomUserCreationForm(request.POST) # UserCreationForm() is a built-in form that will create a new user
             if form.is_valid():
                 user = form.save(commit=False) # commit=False means that the form will not save the data to the database yet
                 user.username = user.username.lower()
@@ -214,7 +213,7 @@ def updateUser(request):
     user = request.user
     form = UserForm(instance=user)
     if request.method == 'POST':
-        form = UserForm(request.POST, instance=user)
+        form = UserForm(request.POST, request.FILES ,instance=user)
         if form.is_valid():
             form.save()
             return redirect('user-profile', pk=user.id)
