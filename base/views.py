@@ -88,7 +88,7 @@ def home(request):
                                 Q(name__icontains=q) | # | is the OR operator
                                 Q(description__icontains=q) 
                                 ) 
-    topics = Topic.objects.all()
+    topics = Topic.objects.all()[0:5] # This will return the first 5 topics in the database
     room_count = rooms.count() # count() will return the number of objects in the queryset
     room_messages = Message.objects.filter(Q(room__topic__name__icontains=q)) # This will return all the messages in the database
 
@@ -220,3 +220,9 @@ def updateUser(request):
             return redirect('user-profile', pk=user.id)
     context = {'form': form}
     return render(request, 'base/update_user.html', context)
+
+def topicsPage(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = Topic.objects.filter(name__icontains=q)
+    context = {'topics': topics}
+    return render(request, 'base/topics.html', context)
